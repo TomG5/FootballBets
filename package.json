@@ -1,0 +1,19 @@
+{
+  "name": "footballbets",
+  "version": "1.0.0",
+  "description": "smart contract",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "TomG5",
+  "license": "MIT",
+  "dependencies": {
+    "ganache": "^7.0.0-internal.1328",
+    "mocha": "^9.0.2",
+    "solc": "^0.8.6",
+    "truffle": "^4.1.15",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.4.0"
+  }
+}
