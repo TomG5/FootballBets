@@ -78,11 +78,11 @@
 	
 	3.2.5 - withdrawPrize: allows the winning participants to withdraw their prize.
 	Parameters: none.
-	Modifiers: can only be executed during the 'Halted' state of the bet.
+	Modifiers: can only be executed during the 'Closed' state of the bet.
 	
 	3.2.6 - receiveContractProfit: allows the manager to collect its profit from the match when no winners were taken.
 	Parameters: none.
-	Modifiers: can only be executed by the owner/manager during the 'Halted' state of the bet.
+	Modifiers: can only be executed by the owner/manager during the 'Closed' state of the bet.
 	
 4) Security measures
 ====================

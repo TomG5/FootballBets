@@ -66,6 +66,11 @@ contract FootballBets {
         _;
     }
 
+    modifier Closed {
+        require(betState == State.Closed);
+        _;
+    }
+
     event newBetMade(address indexed sender, string score);
 
     function newBets(string memory _betScore) public payable Open {
@@ -124,10 +129,11 @@ contract FootballBets {
             prizeAmount = 0;
         }
 
+        betState = State.Closed;
         emit publishWinners(betWinners);
     }
 
-    function withdrawPrize() public Halted {
+    function withdrawPrize() public Closed {
         //  Allow the winners to withdraw their prize in case there are any
         require(betWinners.length > 0);
         require(checkWinner[msg.sender] == true, "This account didn't win.");
@@ -137,12 +143,10 @@ contract FootballBets {
         payable(msg.sender).transfer(individualPrize);
     }
     
-    function receiveContractProfit() public OnlyOwner Halted {
+    function receiveContractProfit() public OnlyOwner Closed {
         //   Allow the contract owner to collect its profits from the match
     require(betWinners.length == 0, "There are winners in this bet.");
     
     manager.transfer(prizeAmount);
-
-    betState = State.Closed;
     }
 }
