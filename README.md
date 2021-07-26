@@ -27,7 +27,8 @@
 
 2.2 - FootballBets
 
-	2.2.1 - manager: person responsible for the contract's management, whose duties are to follow-up users participation, halt new bets before the match starts and finalize the betting option after the 		match ended with the final score.
+	2.2.1 - manager: person responsible for the contract's management, whose duties are to follow-up users participation, halt new bets before the match starts and finalize the betting option after the
+	match ended with the final score.
 
 	2.2.2 - betValue: exact bet value in ether necessary to be sent by the user to participate.
 	
@@ -89,15 +90,19 @@
 
 4.1 - BetGenerator
 
-	4.1.1 - generator: when creating a new instance of FootballBets, it is given as a parameter the owner variable instead of the sender in order to allow any assistant to create new bet options while 		avoiding malicious third-parties to create instances and manage them to steal the prize.
+	4.1.1 - generator: when creating a new instance of FootballBets, it is given as a parameter the owner variable instead of the sender in order to allow any assistant to create new bet options while
+	avoiding malicious third-parties to create instances and manage them to steal the prize.
 	
 4.2 - FootballBets
 
-	4.2.1 - newBets: two requirements were given - one to block the manager address from participating and a second to validate the bet value before accepting it - so no incompatible bets can be 		inserted.
+	4.2.1 - newBets: two requirements were given - one to block the manager address from participating and a second to validate the bet value before accepting it - so no incompatible bets can be
+	inserted.
 	
-	4.2.2 - finalizeBetOption: besides the modifier conditions, the prize amount destined to the participant winners or the manager is setted to zero before allowing the payments, avoiding 		further in both ways the known reentrancy attack in which the attacker causes a never ending withdraw pattern reexecuting a transfer before it changes the value due to zero. 
+	4.2.2 - finalizeBetOption: besides the modifier conditions, the prize amount destined to the participant winners or the manager is setted to zero before allowing the payments, avoiding
+	further in both ways the known reentrancy attack in which the attacker causes a never ending withdraw pattern reexecuting a transfer before it changes the value due to zero. 
 
-	4.2.3 - finalizeBetOption: in case a user enters the contest with duplicated bets, which end up being winners, it was implemented an unique identifier variable to store the winners addresses, 	despite how many right bets they got, to avoid duplicate payments (gas waste) and incorrect calculation of the payable prize amount to each user.
+	4.2.3 - finalizeBetOption: in case a user enters the contest with duplicated bets, which end up being winners, it was implemented an unique identifier variable to store the winners addresses,
+	despite how many right bets they got, to avoid duplicate payments (gas waste) and incorrect calculation of the payable prize amount to each user.
 	
 	4.2.4 - withdrawPrize: besides the modifiers, it is established before paying the winner that his paid status will become true, to avoid (as another measure) the reentrancy attack mentioned before.
 	
