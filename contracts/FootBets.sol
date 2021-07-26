@@ -35,15 +35,16 @@ contract FootballBets {
         uint betAmount;
         address better;
         bool winner;
-        bool paid;
     }
     
     Bet[] public bets;
     uint prizeAmount;
     
     mapping(address => bool) checkWinner;
-    uint[] winningBetsIds;
     address[] public betWinners;
+    
+    uint individualPrize;
+    mapping(address => bool) paidWinner;
 
     constructor(address _manager, string memory _league, string memory _match) {
         manager = payable(_manager);
@@ -75,8 +76,7 @@ contract FootballBets {
             betScore: _betScore,
             betAmount: msg.value,
             better: msg.sender,
-            winner: false,
-            paid: false
+            winner: false
         });
         
         bets.push(newBet);
@@ -105,7 +105,6 @@ contract FootballBets {
         for (uint i = 0; i < bets.length; i++) {
             if(keccak256(bytes(bets[i].betScore)) == keccak256(bytes(matchResult))) {
                 bets[i].winner = true;
-                winningBetsIds.push(i);
 
                 if(checkWinner[bets[i].better] == false) { 
                     checkWinner[bets[i].better] = true;
@@ -120,32 +119,30 @@ contract FootballBets {
             }
         }
         
-        emit publishWinners(betWinners);
-
-        //  Paying the winners in case there are any or sending the amount of bets to the contract owner
-        
         if(betWinners.length > 0) {
-
-            uint individualPrize;
             individualPrize = prizeAmount / betWinners.length;
             prizeAmount = 0;
-                                
-            for (uint i = 0; i < winningBetsIds.length; i++) {
-                if(bets[winningBetsIds[i]].paid == false) {
-                    bets[winningBetsIds[i]].paid = true;
-                    payable(betWinners[i]).transfer(individualPrize);
-                
-                } else {
-                    continue;
-                }
-            }
-            
-        } else {
-            uint earnings = prizeAmount;
-            prizeAmount = 0;
-            manager.transfer(earnings);
         }
+
+        emit publishWinners(betWinners);
+    }
+
+    function withdrawPrize() public Halted {
+        //  Allow the winners to withdraw their prize in case there are any
+        require(betWinners.length > 0);
+        require(checkWinner[msg.sender] == true, "This account didn't win.");
+        require(paidWinner[msg.sender] == false, "You already collected your prize.");
         
-        betState = State.Closed;
+        paidWinner[msg.sender] = true;
+        payable(msg.sender).transfer(individualPrize);
+    }
+    
+    function receiveContractProfit() public OnlyOwner Halted {
+        //   Allow the contract owner to collect its profits from the match
+    require(betWinners.length == 0, "There are winners in this bet.");
+    
+    manager.transfer(prizeAmount);
+
+    betState = State.Closed;
     }
 }
