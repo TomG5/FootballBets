@@ -113,4 +113,12 @@
 	
 	5.2: It is true that this contract stores more information than needed and possibly could be written in a more concise manner, but since it's a portfolio project I opted to demonstrate more clearly 
 	and diversily my capacity to implement as much resources as possible.
+
+6) Technical specifications used
+================================
+
+	Truffle v5.4.1 (core: 5.4.1)
+	Solidity v0.8.6 (solc-js)
+	Node v14.17.3
+	Web3.js v1.4.0
 </pre>
