@@ -35,7 +35,7 @@ contract('FootballBets', (accounts) => {
         }
     });
 
-    it('Finalizes the bet with winners and send them the correct prize', async () => {
+    it('Finalizes the bet with winners and allows them to collect their prize', async () => {
         const generatorInstance = await FootballBets.deployed();
 
         await generatorInstance.newBets.sendTransaction('1:1', {
@@ -59,22 +59,28 @@ contract('FootballBets', (accounts) => {
             from: accounts[0]
         });
 
+        await generatorInstance.withdrawPrize.sendTransaction({
+            from: accounts[2]
+        });
+
         let winnerFinalBalance = await web3.eth.getBalance(accounts[2]);
 
         assert(winnerFinalBalance = (winnerInitialBalance + 3000000000000000), "Winner didn't receive the prize");
     });
+});
 
-    it('Finalizes the bet without winners and sends the manager the whole prize', async () => {    
+contract('FootballBets - Part2', (accounts) => {
+    it('Finalizes the bet without winners and allows the manager to collect its profits', async () => {    
         const generatorInstance = await FootballBets.deployed();
 
         let managerInitialBalance = await web3.eth.getBalance(accounts[0]);
 
         await generatorInstance.newBets.sendTransaction('1:1', {
-            from: accounts[1], value: '1000000000000000'
+            from: accounts[4], value: '1000000000000000'
         });
         
         await generatorInstance.newBets.sendTransaction('2:1', {
-            from: accounts[2], value: '1000000000000000'
+            from: accounts[5], value: '1000000000000000'
         });
 
         await generatorInstance.haltBets.sendTransaction({
@@ -82,6 +88,10 @@ contract('FootballBets', (accounts) => {
         });
         
         await generatorInstance.finalizeBetOption.sendTransaction('4:1', {
+            from: accounts[0]
+        });
+
+        await generatorInstance.receiveContractProfit.sendTransaction({
             from: accounts[0]
         });
 

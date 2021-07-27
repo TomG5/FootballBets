@@ -15,15 +15,15 @@ module.exports = async function(deployer) {
 		return instance.generator("BPL","MANUTD x CHELSEA")
 	});
 	
-	//const contractAddress = await BetGenerator.deployed().then(function(instance) {
-	//	return instance.lastContract.call()
-	//});
+	const contractAddress = await BetGenerator.deployed().then(function(instance) {
+		return instance.lastContract.call()
+	});
 	
-	//await FootballBets.at(contractAddress);
+	await FootballBets.at(contractAddress);
 
-	let owner = await BetGenerator.deployed().then(function(instance) {
+	/*let owner = await BetGenerator.deployed().then(function(instance) {
 		return instance.owner.call()});
 
 	await deployer.deploy(FootballBets, owner, "BPL","MANUTD x CHELSEA");
-	await FootballBets.deployed();
-}
+	await FootballBets.deployed();*/
+};
